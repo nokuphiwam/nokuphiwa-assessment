@@ -9,8 +9,8 @@ IEnumerable<IConfigurationSection> sqlNodes = Program.Configuration
 // Merged results set
 List<received> results = new List<received>();
 
-// Use Parallel.ForEach with MaxDegreeOfParallelism to control concurrent queries
-ParallelOptions parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 5 };
+// Parallel.ForEach with MaxDegreeOfParallelism to control concurrent queries
+ParallelOptions parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 64 };
 Parallel.ForEach(sqlNodes, parallelOptions, node =>
 {
     received[] result = DBQuery<received>.Query(node.Value, sql);
@@ -20,7 +20,7 @@ Parallel.ForEach(sqlNodes, parallelOptions, node =>
     }
 });
 
-// Use bulk insert instead of individual inserts
+// Bulk insert instead of individual inserts
 using (SqlConnection connection = new SqlConnection(ConnectionString))
 {
     connection.Open();
