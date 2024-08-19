@@ -22,6 +22,11 @@ namespace Threading
         }else{
           globalList.Add(randOddNum);
         }
+       if (globalList.Count == 250000)
+      {
+        Thread evenNumThread = new Thread(EvenNumbers);
+        evenNumThread.Start();
+      }
       }
     }
     static bool isPrime(int number){
@@ -48,8 +53,8 @@ namespace Threading
       }
       if (globalList.Count == 250000)
       {
-        Thread thread3 = new Thread(EvenNumbers);
-        thread3.Start();
+        Thread evenNumThread = new Thread(EvenNumbers);
+        evenNumThread.Start();
       }
     }
     static void EvenNumbers(){
@@ -59,14 +64,14 @@ namespace Threading
       }
       
     }
-		public static void Main(string[] args)
-		{
-      Thread thread1 = new Thread(new ThreadStart(RandomOddNumbers));
-      Thread thread2 = new Thread(new ThreadStart(NegativePrimes));
-      thread1.Start();
-      thread2.Start();
-      thread1.Join();
-      thread2.Join();
+   public static void Main(string[] args)
+	{
+      Thread randomNumThread = new Thread(new ThreadStart(RandomOddNumbers));
+      Thread negativePrimeThread = new Thread(new ThreadStart(NegativePrimes));
+      randomNumThread.Start();
+      negativePrimeThread.Start();
+      randomNumThread.Join();
+      negativePrimeThread.Join();
       globalList.Sort();
       int oddCount = globalList.FindAll(x => x % 2 != 0).Count;
       int evenCount = globalList.FindAll(x => x % 2 == 0).Count;
